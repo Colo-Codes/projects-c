@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"workbench.colorTheme": "Bluloco Dark",
+		"files.associations": {
+			"stdio.h": "c",
+			"_stdio.h": "c"
+		}
+	}
+}

@@ -1,0 +1,19 @@
+#include <stdio.h>
+
+int main() {
+    // char str[100];
+    // int i;
+    
+    // printf("Hello, you!\nPlease input your name and age: ");
+    // scanf("%s %d", str, &i);
+
+    // printf("\nYour name is %s, and your age is %d years old.\n", str, i);
+
+    // printf("\nEnter a number: %d", str, );
+    
+    unsigned int *p;
+    p = 9;
+    printf("Value: %p\n", p);
+
+    return 0;
+}
