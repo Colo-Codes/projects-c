@@ -13,6 +13,10 @@
 #include <stdlib.h> // For the random number
 #include <time.h> // For the seed of the random number
 
+#define MAX_GUESSES 5
+#define MIN_NUM 0
+#define MAX_NUM 20
+
 int main()
 {
     unsigned int guessedNumber;
@@ -21,20 +25,20 @@ int main()
     
     // Generate a random number between 0 and 20
     srand((unsigned) time(&t)); // Initialization, should only be called once.
-    int randNum = rand() % 21;
+    int randNum = rand() % (MAX_NUM + 1);
     
     // Greet the user
-    printf("\nHi player! Please, guess an integer number between 0 and 20: ");
+    printf("\nHi player! Please, guess an integer number between %d and %d: ", MIN_NUM, MAX_NUM);
 
-    while (attempts <= 5 && guessedNumber != randNum)
+    while (attempts <= MAX_GUESSES && guessedNumber != randNum)
     {
-        // Ask the user for they chosen number
+        // Ask the user for their chosen number
         scanf("%d", &guessedNumber);
         
         // Warn they if the number is outside the 0 to 20 window
-        while (20 < guessedNumber || guessedNumber < 0)
+        while (MAX_NUM < guessedNumber || guessedNumber < MIN_NUM)
         {
-            printf("\nPlease, choose a number between 0 and 20: ");
+            printf("\nPlease, choose a number between %d and %d: ", MIN_NUM, MAX_NUM);
             scanf("%d", &guessedNumber);
         }
 
@@ -55,11 +59,11 @@ int main()
             printf("\nCONGRATULATIONS!!! You guessed correctly in %d attempt(s)! The number was: %d\n\n", attempts, randNum);
         }
 
-        if (guessedNumber != randNum && attempts < 5)
+        if (guessedNumber != randNum && attempts < MAX_GUESSES)
         {
-            printf(" Try again (used %d out of 5 attempts): ", attempts);
+            printf(" Try again (used %d out of %d attempts): ", attempts, MAX_GUESSES);
         }
-        else if (guessedNumber != randNum && attempts >= 5)
+        else if (guessedNumber != randNum && attempts >= MAX_GUESSES)
         {
             printf(" The number was %d. GAME OVER!\n\n", randNum);
 
