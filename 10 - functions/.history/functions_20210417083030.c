@@ -41,11 +41,11 @@ int main()
     printf("The absolute value is: %.2f\n", abs);
 
     //Square root value
-    printf("Please, enter a number you wish to get the square root value from: ");
+    printf("Please, enter a number you wish to get the square value from: ");
     scanf("%f", &sqInput);
     sqN = square(sqInput);
     if (sqN != -1)
-        printf("The square root value is: %.2f\n", sqN);
+        printf("The square value is: %.2f\n", sqN);
 
     return 0;
 }
@@ -102,7 +102,7 @@ float square(float n)
             // Then, replace values (256 / 128 + 128 ) / 2 = 65
             // (on second iteration 34.46923076923077)
             // and so on
-            sqrt = ( n/temp + temp) / 2.0;
+            sqrt = ( n/temp + temp) / 2;
         }
     }
 
