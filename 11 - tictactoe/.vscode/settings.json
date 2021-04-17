@@ -1,0 +1,7 @@
+{
+    "workbench.colorTheme": "Solarized-light",
+    "files.associations": {
+        "stdio.h": "c",
+        "_stdio.h": "c"
+    }
+}
