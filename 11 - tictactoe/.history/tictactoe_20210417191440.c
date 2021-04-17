@@ -3,7 +3,7 @@
  * Date: 17/04/2021
  * Requirements:
  *  Write a program that plays Tic Tac Toe. The game is played on a 3x3 grid, by 2 players who take turns.
- *  Use at least three functions:
+ *  Use three functions:
  *      - Check to see if a player won or the game is draw.
  *      - Redraw the board for each player turn.
  *      - Set a char array with a selection and check for an invalid selection.
@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h> // For system()
 
-#define MAX_ATTEMPTS 3 // Allows 3 wrong guesses per turn
+#define MAX_ATTEMPTS 3
 
 // Function declarations
 void drawBoard(int boardArray[3][3]);
@@ -23,9 +23,9 @@ void updateBoard(int selection, int activePlayer, int boardArray[3][3]);
 // Function definitions
 int main()
 {
-    int selection = 1,
+    int selection = 0,
         endGame = 0,
-        wrongSelections = 0,
+        wrongSelections = 1,
         activePlayer = 0;
 
     // Game initial state
@@ -35,7 +35,7 @@ int main()
         {'7', '8', '9'}
     };
 
-    while(wrongSelections < MAX_ATTEMPTS)
+    while(wrongSelections < MAX_ATTEMPTS + 1) // Allows 3 wrong guesses
     {
 
         if (endGame == 0)
@@ -66,26 +66,20 @@ int main()
             scanf("%d", &selection);
             
             // Check if selection is valid
-            while (wrongSelections < MAX_ATTEMPTS)
+            while (wrongSelections < MAX_ATTEMPTS + 1) // Allows 3 wrong guesses
             {
-                if(checkValid(selection, boardArray) != 1)
+                if(checkValid(selection, boardArray) != 1 && selection != 0)
                 {
-                    wrongSelections++;
-                    
-                    if (wrongSelections == 3)
-                    {
-                        printf("\n\n\t! ! ! GAME OVER - Too many wrong options selected. Player %d lost the game. ! ! !\n\n", activePlayer);
-                        break;
-                    }
-
-                    printf("\n\tPlayer %d - Wrong selection, please try again (%d of %d attempts): ", activePlayer, wrongSelections, MAX_ATTEMPTS);
+                    printf("\n\n\tPlayer %d - Wrong selection, please try again (%d of %d attempts): ", activePlayer, wrongSelections, MAX_ATTEMPTS);
                     scanf("%d", &selection);
+                    
+                    wrongSelections++;
+
+                    if (wrongSelections == 3)
+                        printf("\n\n\t! ! ! GAME OVER - Too many wrong options selected. ! ! !\n\n");
                 }
                 else
                 {
-                    // Reset wrong selections
-                    wrongSelections = 0;
-                    
                     break;
                 }
             }
@@ -145,6 +139,9 @@ int checkValid(int selection, int boardArray[3][3])
 
     switch (selection)
     {
+        case 0:
+            validFlag = 1;
+            break;
         case 1:
         case 2:
         case 3:
@@ -177,6 +174,8 @@ int checkValid(int selection, int boardArray[3][3])
 int checkWonDraw(int boardArray[3][3])
 {
     int endGame = 0;
+    int i, j;
+    char k;
 
     // Check for winning combinations
     if ((boardArray[0][0] == boardArray[0][1] && boardArray[0][1] == boardArray[0][2]) ||
@@ -200,7 +199,7 @@ int checkWonDraw(int boardArray[3][3])
             (boardArray[1][0] != '4' && boardArray[1][1] != '5' && boardArray[1][2] != '6') &&
             (boardArray[2][0] != '7' && boardArray[2][1] != '8' && boardArray[2][2] != '9'))
         {
-            // Game is draw
+            // Game in draw
             endGame = 2;
         }
     }

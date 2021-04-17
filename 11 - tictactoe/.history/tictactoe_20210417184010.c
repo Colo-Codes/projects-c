@@ -3,7 +3,7 @@
  * Date: 17/04/2021
  * Requirements:
  *  Write a program that plays Tic Tac Toe. The game is played on a 3x3 grid, by 2 players who take turns.
- *  Use at least three functions:
+ *  Use three functions:
  *      - Check to see if a player won or the game is draw.
  *      - Redraw the board for each player turn.
  *      - Set a char array with a selection and check for an invalid selection.
@@ -12,30 +12,30 @@
 #include <stdio.h>
 #include <stdlib.h> // For system()
 
-#define MAX_ATTEMPTS 3 // Allows 3 wrong guesses per turn
+#define MAX_ATTEMPTS 3
+
+// Global variables
+int boardArray[3][3] = {
+    {'1', '2', '3'},
+    {'4', '5', '6'},
+    {'7', '8', '9'}
+};
 
 // Function declarations
-void drawBoard(int boardArray[3][3]);
-int checkValid(int selection, int boardArray[3][3]);
-int checkWonDraw(int boardArray[3][3]);
-void updateBoard(int selection, int activePlayer, int boardArray[3][3]);
+void drawBoard();
+int checkValid(int selection);
+int checkWonDraw();
+void updateBoard(int selection, int activePlayer);
 
 // Function definitions
 int main()
 {
-    int selection = 1,
+    int selection = 0,
         endGame = 0,
-        wrongSelections = 0,
+        wrongSelections = 1,
         activePlayer = 0;
 
-    // Game initial state
-    int boardArray[3][3] = {
-        {'1', '2', '3'},
-        {'4', '5', '6'},
-        {'7', '8', '9'}
-    };
-
-    while(wrongSelections < MAX_ATTEMPTS)
+    while(wrongSelections < MAX_ATTEMPTS) // Allows 3 wrong guesses
     {
 
         if (endGame == 0)
@@ -56,7 +56,9 @@ int main()
         }
 
         // Present the board and select player
-        drawBoard(boardArray);
+        drawBoard();
+
+        printf("\nDEBUG (1) - activePlayer=%d - selection=%d", activePlayer, selection);
 
         // Calculate current turn
         if (endGame == 0)
@@ -66,33 +68,36 @@ int main()
             scanf("%d", &selection);
             
             // Check if selection is valid
-            while (wrongSelections < MAX_ATTEMPTS)
+            while (wrongSelections < MAX_ATTEMPTS) // Allows 3 wrong guesses
             {
-                if(checkValid(selection, boardArray) != 1)
-                {
-                    wrongSelections++;
-                    
-                    if (wrongSelections == 3)
-                    {
-                        printf("\n\n\t! ! ! GAME OVER - Too many wrong options selected. Player %d lost the game. ! ! !\n\n", activePlayer);
-                        break;
-                    }
+                printf("\nDEBUG (2) - activePlayer=%d - selection=%d", activePlayer, selection);
 
-                    printf("\n\tPlayer %d - Wrong selection, please try again (%d of %d attempts): ", activePlayer, wrongSelections, MAX_ATTEMPTS);
+                if(checkValid(selection) != 1 && selection != 0)
+                {
+                    printf("\n\n\tPlayer %d - Wrong selection, please try again (%d of %d attempts): ", activePlayer, wrongSelections, MAX_ATTEMPTS);
                     scanf("%d", &selection);
+                    
+                    wrongSelections++;
+
+                    if (wrongSelections == 3)
+                        printf("\n\n\t! ! ! GAME OVER - Too many wrong options selected. ! ! !\n\n");
                 }
                 else
                 {
-                    // Reset wrong selections
-                    wrongSelections = 0;
-                    
                     break;
                 }
             }
         }
         else if (endGame == 1)
         {
+            // drawBoard(selection);
             printf("\n\n\t~ ~ ~ ~ CONGRATULATIONS player %d!!! You won the game!!! ~ ~ ~ ~\n\n", activePlayer);
+            break;
+        }
+        else if (endGame == 2)
+        {
+            // drawBoard(selection);
+            printf("\n\n\t! ! ! GAME OVER - The game ended in draw. ! ! !\n\n");
             break;
         }
         else
@@ -101,25 +106,16 @@ int main()
         }
         
         // Update board
-        updateBoard(selection, activePlayer, boardArray);
+        updateBoard(selection, activePlayer);
 
         // Check game status
-        endGame = checkWonDraw(boardArray);
-
-        // Check draw
-        if (endGame == 2)
-        {
-            drawBoard(boardArray);
-            
-            printf("\n\n\t! ! ! GAME OVER - The game ended in draw. ! ! !\n\n");
-            break;
-        }
+        endGame = checkWonDraw();
     }
 
     return 0;
 }
 
-void drawBoard(int boardArray[3][3])
+void drawBoard()
 {
     system("clear"); // Clear screen on *nix
     printf("\n\t  _____ _        _____            _____           ");
@@ -139,12 +135,18 @@ void drawBoard(int boardArray[3][3])
     printf("\n\t\t\t     |     |     ");
 }
 
-int checkValid(int selection, int boardArray[3][3])
+int checkValid(int selection)
 {
     int validFlag = 1;
 
+    printf("\nDEBUG (3) - activePlayer=%d - selection=%d", activePlayer. selection);
+
+
     switch (selection)
     {
+        case 0:
+            validFlag = 1;
+            break;
         case 1:
         case 2:
         case 3:
@@ -155,14 +157,14 @@ int checkValid(int selection, int boardArray[3][3])
         case 4:
         case 5:
         case 6:
-            if(boardArray[1][selection - 4] == 'X' || boardArray[1][selection - 4] == 'O')
+            if(boardArray[1][selection - 1] == 'X' || boardArray[1][selection - 1] == 'O')
                 validFlag = 0;
             break;
         
         case 7:
         case 8:
         case 9:
-            if(boardArray[2][selection - 7] == 'X' || boardArray[2][selection - 7] == 'O')
+            if(boardArray[2][selection - 1] == 'X' || boardArray[2][selection - 1] == 'O')
                 validFlag = 0;
             break;
 
@@ -174,12 +176,12 @@ int checkValid(int selection, int boardArray[3][3])
     return validFlag;
 }
 
-int checkWonDraw(int boardArray[3][3])
+int checkWonDraw()
 {
     int endGame = 0;
+    int i, j, k;
 
-    // Check for winning combinations
-    if ((boardArray[0][0] == boardArray[0][1] && boardArray[0][1] == boardArray[0][2]) ||
+    if( (boardArray[0][0] == boardArray[0][1] && boardArray[0][1] == boardArray[0][2]) ||
         (boardArray[1][0] == boardArray[1][1] && boardArray[1][1] == boardArray[1][2]) ||
         (boardArray[2][0] == boardArray[2][1] && boardArray[2][1] == boardArray[2][2]) ||
 
@@ -195,12 +197,22 @@ int checkWonDraw(int boardArray[3][3])
     }
     else
     {
-        // Check for no free positions
-        if ((boardArray[0][0] != '1' && boardArray[0][1] != '2' && boardArray[0][2] != '3') &&
-            (boardArray[1][0] != '4' && boardArray[1][1] != '5' && boardArray[1][2] != '6') &&
-            (boardArray[2][0] != '7' && boardArray[2][1] != '8' && boardArray[2][2] != '9'))
+        int countDraw = 0;
+
+        for (i = 0; i < 3; i++)
         {
-            // Game is draw
+            for (j = 0; j < 3; j++)
+            {
+                for (k = 1; k < 10; k++)
+                {
+                    if (boardArray[i][j] != k)
+                        countDraw++;
+                }
+            }
+        }
+        if (countDraw == 9)
+        {
+            // Game in draw
             endGame = 2;
         }
     }
@@ -208,7 +220,7 @@ int checkWonDraw(int boardArray[3][3])
     return endGame;
 }
 
-void updateBoard(int selection, int activePlayer, int boardArray[3][3])
+void updateBoard(int selection, int activePlayer)
 {
     char drawSelection = '0';
 

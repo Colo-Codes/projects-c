@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h> // For system()
 
-#define MAX_ATTEMPTS 3 // Allows 3 wrong guesses per turn
+#define MAX_ATTEMPTS 3 // Allows 3 wrong guesses
 
 // Function declarations
 void drawBoard(int boardArray[3][3]);
@@ -23,9 +23,9 @@ void updateBoard(int selection, int activePlayer, int boardArray[3][3]);
 // Function definitions
 int main()
 {
-    int selection = 1,
+    int selection = 0,
         endGame = 0,
-        wrongSelections = 0,
+        wrongSelections = 1,
         activePlayer = 0;
 
     // Game initial state
@@ -68,23 +68,20 @@ int main()
             // Check if selection is valid
             while (wrongSelections < MAX_ATTEMPTS)
             {
-                if(checkValid(selection, boardArray) != 1)
+                if(checkValid(selection, boardArray) != 1 && selection != 0)
                 {
                     wrongSelections++;
                     
-                    if (wrongSelections == 3)
-                    {
-                        printf("\n\n\t! ! ! GAME OVER - Too many wrong options selected. Player %d lost the game. ! ! !\n\n", activePlayer);
-                        break;
-                    }
-
                     printf("\n\tPlayer %d - Wrong selection, please try again (%d of %d attempts): ", activePlayer, wrongSelections, MAX_ATTEMPTS);
                     scanf("%d", &selection);
+                    
+                    if (wrongSelections == 3)
+                        printf("\n\n\t! ! ! GAME OVER - Too many wrong options selected. Player %d lost the game. ! ! !\n\n", activePlayer);
                 }
                 else
                 {
                     // Reset wrong selections
-                    wrongSelections = 0;
+                    wrongSelections = 1;
                     
                     break;
                 }
@@ -145,6 +142,9 @@ int checkValid(int selection, int boardArray[3][3])
 
     switch (selection)
     {
+        case 0:
+            validFlag = 1;
+            break;
         case 1:
         case 2:
         case 3:
@@ -177,6 +177,8 @@ int checkValid(int selection, int boardArray[3][3])
 int checkWonDraw(int boardArray[3][3])
 {
     int endGame = 0;
+    int i, j;
+    char k;
 
     // Check for winning combinations
     if ((boardArray[0][0] == boardArray[0][1] && boardArray[0][1] == boardArray[0][2]) ||
@@ -200,7 +202,7 @@ int checkWonDraw(int boardArray[3][3])
             (boardArray[1][0] != '4' && boardArray[1][1] != '5' && boardArray[1][2] != '6') &&
             (boardArray[2][0] != '7' && boardArray[2][1] != '8' && boardArray[2][2] != '9'))
         {
-            // Game is draw
+            // Game in draw
             endGame = 2;
         }
     }

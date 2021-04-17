@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h> // For system()
 
-#define MAX_ATTEMPTS 3 // Allows 3 wrong guesses per turn
+#define MAX_ATTEMPTS 3 // Allows 3 wrong guesses
 
 // Function declarations
 void drawBoard(int boardArray[3][3]);
@@ -177,6 +177,8 @@ int checkValid(int selection, int boardArray[3][3])
 int checkWonDraw(int boardArray[3][3])
 {
     int endGame = 0;
+    int i, j;
+    char k;
 
     // Check for winning combinations
     if ((boardArray[0][0] == boardArray[0][1] && boardArray[0][1] == boardArray[0][2]) ||
@@ -200,7 +202,7 @@ int checkWonDraw(int boardArray[3][3])
             (boardArray[1][0] != '4' && boardArray[1][1] != '5' && boardArray[1][2] != '6') &&
             (boardArray[2][0] != '7' && boardArray[2][1] != '8' && boardArray[2][2] != '9'))
         {
-            // Game is draw
+            // Game in draw
             endGame = 2;
         }
     }

@@ -13,7 +13,7 @@
             "stopAtEntry": true,
             "cwd": "${workspaceFolder}",
             "environment": [],
-            "externalConsole": false,
+            "externalConsole": false, // Useful for debugging (asks for user input)
             "MIMode": "lldb",
             // "miDebuggerPath": "/usr/bin/gdb"
         }
