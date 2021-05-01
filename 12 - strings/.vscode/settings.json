@@ -1,0 +1,8 @@
+{
+    "workbench.colorTheme": "Default Dark+",
+    "files.associations": {
+        "stdio.h": "c",
+        "_stdio.h": "c",
+        "stdlib.h": "c"
+    }
+}
